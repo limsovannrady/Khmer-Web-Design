@@ -1,0 +1,12 @@
+packages:
+  "framer-motion": "For smooth layout animations, entrance effects, and satisfying micro-interactions"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes"
+  "@radix-ui/react-toast": "For accessible toast notifications (copying email)"
+
+images: []
+
+notes:
+  - "Using provided developer avatar image from @assets alias."
+  - "Relying on @workspace/api-client-react for generated TanStack Query hooks."
+  - "Using native iframe with srcDoc and sandbox for securely rendering email HTML without external sanitization libraries."

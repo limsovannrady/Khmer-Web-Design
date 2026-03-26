@@ -14,3 +14,35 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Creates a new temporary email address using DropMail
+ * @summary Create a temporary email session
+ */
+export const CreateEmailResponse = zod.object({
+  sessionId: zod.string(),
+  email: zod.string(),
+  expiresAt: zod.string(),
+});
+
+/**
+ * Retrieves all messages for the given email session
+ * @summary Get messages for a session
+ */
+export const GetMessagesParams = zod.object({
+  sessionId: zod.coerce.string(),
+});
+
+export const GetMessagesResponse = zod.object({
+  messages: zod.array(
+    zod.object({
+      id: zod.string(),
+      fromAddr: zod.string(),
+      toAddr: zod.string(),
+      headerSubject: zod.string(),
+      receivedAt: zod.string(),
+      text: zod.string().optional(),
+      html: zod.string().optional(),
+    }),
+  ),
+});

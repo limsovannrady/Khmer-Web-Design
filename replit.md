@@ -1,5 +1,18 @@
 # Workspace
 
+## Artifacts
+
+### `artifacts/khmer-temp-email` (`@workspace/khmer-temp-email`)
+
+A full Khmer-language temporary email website (ដ្រម៉ែល) using the DropMail GraphQL API.
+- Frontend: React + Vite with Khmer font, framer-motion animations, orange warm design
+- Auto-generates temporary email addresses, shows inbox with 5-second auto-refresh
+- Developer footer: LIM SOVANNRADY, Telegram @limsovannrady
+- Mounted at: `/`
+- API routes: `POST /api/email/create`, `GET /api/email/:sessionId/messages`
+
+
+
 ## Overview
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.

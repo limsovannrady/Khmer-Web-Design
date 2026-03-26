@@ -5,15 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface EmailSession {
-  sessionId: string;
-  email: string;
-  expiresAt: string;
-}
 
 export interface EmailMessage {
   id: string;
@@ -23,12 +14,4 @@ export interface EmailMessage {
   receivedAt: string;
   text?: string;
   html?: string;
-}
-
-export interface MessagesResponse {
-  messages: EmailMessage[];
-}
-
-export interface ErrorResponse {
-  error: string;
 }

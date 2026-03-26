@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "ដ្រម៉ែល - Email បណ្ដោះអាសន្ន"
+version = "1.0.0"
+id = "artifacts/khmer-temp-email"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25605
+
+[services.development]
+run = "pnpm --filter @workspace/khmer-temp-email run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/khmer-temp-email", "run", "build" ]
+publicDir = "artifacts/khmer-temp-email/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25605"
+BASE_PATH = "/"

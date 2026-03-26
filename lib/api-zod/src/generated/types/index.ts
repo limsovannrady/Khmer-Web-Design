@@ -6,4 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./emailMessage";
+export * from "./emailSession";
+export * from "./errorResponse";
 export * from "./healthStatus";
+export * from "./messagesResponse";

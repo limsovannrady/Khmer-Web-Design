@@ -1,6 +1,5 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
   description: API specification
@@ -10,6 +9,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: email
+    description: Temporary email operations
 paths:
   /healthz:
     get:
@@ -24,6 +25,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /email/create:
+    post:
+      operationId: createEmail
+      tags: [email]
+      summary: Create a temporary email session
+      description: Creates a new temporary email address using DropMail
+      responses:
+        "200":
+          description: Email created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailSession"
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /email/{sessionId}/messages:
+    get:
+      operationId: getMessages
+      tags: [email]
+      summary: Get messages for a session
+      description: Retrieves all messages for the given email session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Messages list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagesResponse"
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +78,55 @@ components:
           type: string
       required:
         - status
-
+    EmailSession:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        email:
+          type: string
+        expiresAt:
+          type: string
+      required:
+        - sessionId
+        - email
+        - expiresAt
+    EmailMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        fromAddr:
+          type: string
+        toAddr:
+          type: string
+        headerSubject:
+          type: string
+        receivedAt:
+          type: string
+        text:
+          type: string
+        html:
+          type: string
+      required:
+        - id
+        - fromAddr
+        - toAddr
+        - headerSubject
+        - receivedAt
+    MessagesResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailMessage"
+      required:
+        - messages
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
