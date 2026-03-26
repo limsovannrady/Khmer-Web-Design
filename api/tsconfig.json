@@ -5,8 +5,5 @@
     "module": "esnext",
     "moduleResolution": "bundler"
   },
-  "include": ["."],
-  "references": [
-    { "path": "../artifacts/api-server" }
-  ]
+  "include": ["."]
 }
