@@ -1,127 +1,141 @@
 import { useState } from "react";
-import { Mail, RefreshCw, Inbox as InboxIcon } from "lucide-react";
+import { Mail, RefreshCw, ChevronRight, Inbox as InboxIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGetMessages } from "@workspace/api-client-react";
 import { EmailViewer } from "./EmailViewer";
 import type { EmailMessage } from "@workspace/api-client-react";
-import { formatKhmerDate, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface InboxProps {
   sessionId: string;
+}
+
+const AVATAR_COLORS = [
+  "from-blue-500 to-cyan-400",
+  "from-purple-500 to-pink-400",
+  "from-green-500 to-emerald-400",
+  "from-orange-500 to-amber-400",
+  "from-red-500 to-rose-400",
+  "from-indigo-500 to-violet-400",
+];
+
+function getAvatarColor(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+function getInitial(fromAddr: string) {
+  const name = fromAddr.split('<')[0].trim() || fromAddr;
+  return name[0]?.toUpperCase() || "?";
 }
 
 export function Inbox({ sessionId }: InboxProps) {
   const [selectedMessage, setSelectedMessage] = useState<EmailMessage | null>(null);
 
   const { data, isLoading, isRefetching, refetch } = useGetMessages(sessionId, {
-    query: {
-      refetchInterval: 5000, // Auto-refresh every 5 seconds
-      enabled: !!sessionId,
-    }
+    query: { refetchInterval: 5000, enabled: !!sessionId }
   });
 
   const messages = data?.messages || [];
 
+  if (selectedMessage) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 pb-6">
+        <EmailViewer message={selectedMessage} onBack={() => setSelectedMessage(null)} />
+      </div>
+    );
+  }
+
   return (
-    <section className="max-w-6xl mx-auto px-4 py-16 lg:py-24" id="inbox">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-6">
-        <div className="flex items-center gap-4">
-          <div className="p-4 bg-primary/10 text-primary rounded-2xl">
-            <InboxIcon className="w-8 h-8" />
-          </div>
-          <h3 className="text-3xl font-black text-foreground">ប្រអប់សំបុត្រ</h3>
-          <span className="px-4 py-1.5 bg-primary text-primary-foreground rounded-full text-lg font-black ml-2 shadow-lg shadow-primary/20">
-            {messages.length}
-          </span>
+    <div className="max-w-2xl mx-auto px-4 pb-6 space-y-3">
+
+      {/* Inbox Header */}
+      <div className="flex items-center justify-between px-1" id="inbox">
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-black text-foreground">ប្រអប់សំបុត្រ</h3>
+          {messages.length > 0 && (
+            <span className="px-2 py-0.5 bg-primary text-white rounded-full text-xs font-black shadow-sm shadow-primary/20">
+              {messages.length}
+            </span>
+          )}
         </div>
-        
-        <button 
+        <button
           onClick={() => refetch()}
           disabled={isRefetching}
-          className="flex items-center gap-3 px-6 py-3 bg-secondary text-secondary-foreground border border-border shadow-md rounded-xl text-base font-bold hover:bg-secondary/80 transition-colors disabled:opacity-50 active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary rounded-lg text-xs font-bold text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors active:scale-95"
         >
-          <RefreshCw className={cn("w-5 h-5", isRefetching && "animate-spin")} />
-          <span>ធ្វើបច្ចុប្បន្នភាព</span>
+          <RefreshCw className={cn("w-3 h-3", isRefetching && "animate-spin")} />
+          ធ្វើបច្ចុប្បន្នភាព
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[700px]">
-        {/* Email List */}
-        <div className={cn(
-          "lg:col-span-5 lg:flex flex-col gap-4",
-          selectedMessage ? "hidden lg:flex" : "flex"
-        )}>
-          {isLoading && !messages.length ? (
-            <div className="h-full flex flex-col items-center justify-center p-12 text-muted-foreground border-2 border-dashed border-border rounded-3xl bg-card/30">
-              <RefreshCw className="w-10 h-10 animate-spin mb-4 text-primary/50" />
-              <p className="text-lg font-medium">កំពុងផ្ទុកទិន្នន័យ...</p>
+      {/* Message List */}
+      <div className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-lg">
+        {isLoading && !messages.length ? (
+          <div className="flex flex-col items-center justify-center p-10 gap-3 text-muted-foreground">
+            <RefreshCw className="w-6 h-6 animate-spin text-primary/50" />
+            <p className="text-sm">កំពុងផ្ទុកទិន្នន័យ...</p>
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-10 gap-3 text-center">
+            <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
+              <Mail className="w-7 h-7 text-muted-foreground opacity-50" />
             </div>
-          ) : messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-border rounded-3xl bg-card/30">
-              <Mail className="w-16 h-16 text-muted-foreground mb-6 opacity-40" />
-              <h4 className="text-2xl font-bold text-foreground mb-3">មិនទាន់មានសំបុត្រ</h4>
-              <p className="text-base text-muted-foreground max-w-xs">
-                អ៊ីម៉ែលដែលអ្នកទទួលបាននឹងបង្ហាញនៅទីនេះ។ យើងកំពុងរង់ចាំ...
-              </p>
+            <div>
+              <p className="text-sm font-bold text-foreground">មិនទាន់មានសំបុត្រ</p>
+              <p className="text-xs text-muted-foreground mt-1">សំបុត្រថ្មីនឹងបង្ហាញនៅទីនេះ</p>
             </div>
-          ) : (
-            <div className="space-y-4 overflow-y-auto max-h-[900px] pr-2 custom-scrollbar">
-              <AnimatePresence>
-                {messages.map((msg) => (
-                  <motion.button
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    key={msg.id}
-                    onClick={() => setSelectedMessage(msg)}
-                    className={cn(
-                      "w-full text-left p-6 rounded-2xl transition-all duration-300 border-2",
-                      selectedMessage?.id === msg.id 
-                        ? "bg-primary/10 border-primary shadow-lg shadow-primary/10" 
-                        : "bg-card border-border shadow-sm hover:border-primary/50 hover:shadow-md"
-                    )}
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <p className="font-bold text-lg text-foreground truncate pr-4">
-                        {msg.fromAddr.split('<')[0] || msg.fromAddr}
+          </div>
+        ) : (
+          <AnimatePresence initial={false}>
+            {messages.map((msg, index) => (
+              <motion.div
+                key={msg.id}
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <button
+                  onClick={() => setSelectedMessage(msg)}
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary/40 active:bg-secondary/60 transition-colors text-left"
+                >
+                  {/* Avatar */}
+                  <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${getAvatarColor(msg.fromAddr)} flex items-center justify-center shrink-0 shadow-sm`}>
+                    <span className="text-white text-base font-black">{getInitial(msg.fromAddr)}</span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <p className="text-sm font-bold text-foreground truncate pr-2">
+                        {msg.fromAddr.split('<')[0].trim() || msg.fromAddr}
                       </p>
-                      <span className="text-sm font-bold text-muted-foreground shrink-0 bg-secondary px-2 py-1 rounded-md">
+                      <span className="text-[11px] text-muted-foreground shrink-0">
                         {new Date(msg.receivedAt).toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <p className="text-base font-bold text-foreground/90 truncate mb-2">
+                    <p className="text-xs font-semibold text-foreground/80 truncate">
                       {msg.headerSubject || "(គ្មានប្រធានបទ)"}
                     </p>
-                    <p className="text-sm text-muted-foreground truncate font-medium">
-                      {msg.text?.substring(0, 80) || "ចុចដើម្បីមើលខ្លឹមសារ..."}
+                    <p className="text-xs text-muted-foreground truncate mt-0.5">
+                      {msg.text?.substring(0, 60) || "ចុចដើម្បីអាន..."}
                     </p>
-                  </motion.button>
-                ))}
-              </AnimatePresence>
-            </div>
-          )}
-        </div>
+                  </div>
 
-        {/* Email Viewer */}
-        <div className={cn(
-          "lg:col-span-7",
-          !selectedMessage ? "hidden lg:block" : "block"
-        )}>
-          {selectedMessage ? (
-            <EmailViewer 
-              message={selectedMessage} 
-              onBack={() => setSelectedMessage(null)} 
-            />
-          ) : (
-            <div className="h-full hidden lg:flex flex-col items-center justify-center border-2 border-dashed border-border rounded-3xl bg-card/30 text-muted-foreground">
-              <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center mb-6 shadow-inner">
-                <Mail className="w-12 h-12 text-primary/40" />
-              </div>
-              <p className="text-xl font-bold">ជ្រើសរើសសំបុត្រដើម្បីអាន</p>
-            </div>
-          )}
-        </div>
+                  <ChevronRight className="w-4 h-4 text-border shrink-0" />
+                </button>
+
+                {index < messages.length - 1 && (
+                  <div className="h-px bg-border/40 ml-[3.75rem]" />
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
       </div>
-    </section>
+
+    </div>
   );
 }
