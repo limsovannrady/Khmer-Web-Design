@@ -1,4 +1,5 @@
-import { Trash2, CheckCircle2, Mail } from "lucide-react";
+import { useState } from "react";
+import { Trash2, CheckCircle2, Mail, Copy, Check } from "lucide-react";
 import type { EmailHistoryItem } from "@/hooks/use-email-session";
 
 interface EmailListTabProps {
@@ -9,6 +10,14 @@ interface EmailListTabProps {
 }
 
 export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: EmailListTabProps) {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (item: EmailHistoryItem) => {
+    navigator.clipboard.writeText(item.email);
+    setCopiedId(item.sessionId);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   if (history.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 pt-16 pb-28 flex flex-col items-center gap-3 text-center">
@@ -35,6 +44,8 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
       <div className="space-y-2">
         {history.map((item) => {
           const isActive = item.sessionId === activeSessionId;
+          const isCopied = copiedId === item.sessionId;
+
           return (
             <div
               key={item.sessionId}
@@ -44,7 +55,7 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
                   : 'bg-card border-border/50'
               }`}
             >
-              <div className="flex items-center gap-3 px-4 py-3">
+              <div className="flex items-center gap-2 px-4 py-3">
                 <div className="relative shrink-0">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-green-400 flex items-center justify-center font-black text-xs text-white shadow-sm shadow-green-500/30">
                     @
@@ -73,6 +84,17 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
                 {isActive && (
                   <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
                 )}
+
+                <button
+                  onClick={() => handleCopy(item)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-xl active:scale-95 transition-all shrink-0 ${
+                    isCopied
+                      ? 'text-green-400 bg-green-500/10'
+                      : 'text-muted-foreground hover:text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                </button>
 
                 <button
                   onClick={() => onDelete(item.sessionId)}
