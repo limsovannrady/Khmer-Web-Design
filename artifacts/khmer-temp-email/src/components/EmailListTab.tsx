@@ -23,53 +23,65 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
 
   return (
     <div className="max-w-2xl mx-auto px-4 pt-6 pb-28 space-y-3">
-      <p className="text-xs font-bold text-muted-foreground px-1 uppercase tracking-wider">
-        Email ទាំងអស់ ({history.length})
-      </p>
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+          Email ទាំងអស់
+        </p>
+        <span className="text-xs font-bold text-green-400 bg-green-500/15 px-2 py-0.5 rounded-full">
+          {history.length} អាចទទួលសារ
+        </span>
+      </div>
 
-      <div className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-lg">
-        {history.map((item, index) => {
+      <div className="space-y-2">
+        {history.map((item) => {
           const isActive = item.sessionId === activeSessionId;
           const date = new Date(item.createdAt);
           const timeStr = date.toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit' });
           const dateStr = date.toLocaleDateString('km-KH', { day: '2-digit', month: '2-digit' });
 
           return (
-            <div key={item.sessionId}>
-              {index > 0 && <div className="h-px bg-border/40 ml-[3.75rem]" />}
-              <div className="flex items-center">
+            <div
+              key={item.sessionId}
+              className={`rounded-2xl border overflow-hidden transition-all ${
+                isActive
+                  ? 'bg-green-500/5 border-green-500/30 shadow-sm shadow-green-500/10'
+                  : 'bg-card border-border/50'
+              }`}
+            >
+              <div className="flex items-center gap-3 px-4 py-3">
+                <div className="relative shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-green-400 flex items-center justify-center font-black text-xs text-white shadow-sm shadow-green-500/30">
+                    @
+                  </div>
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-background rounded-full" />
+                </div>
+
                 <button
                   onClick={() => onSwitch(item)}
-                  className="flex-1 flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/40 active:bg-secondary/60 transition-colors text-left"
+                  className="flex-1 min-w-0 text-left"
                 >
-                  <div className="relative shrink-0">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs ${
-                      isActive
-                        ? 'bg-gradient-to-br from-green-500 to-green-400 text-white shadow-sm shadow-green-500/30'
-                        : 'bg-secondary text-muted-foreground'
-                    }`}>
-                      @
-                    </div>
-                    {isActive && (
-                      <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-background rounded-full" />
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-sm font-bold text-foreground truncate">{item.email}</p>
+                    {isActive ? (
+                      <span className="text-[10px] font-bold text-white bg-green-500 px-1.5 py-0.5 rounded-full shrink-0">
+                        កំពុងប្រើ
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold text-green-400 bg-green-500/15 px-1.5 py-0.5 rounded-full shrink-0">
+                        អាចទទួលសារ
+                      </span>
                     )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <p className="text-sm font-bold text-foreground truncate">{item.email}</p>
-                      {isActive && (
-                        <span className="text-[10px] font-bold text-green-400 bg-green-500/15 px-1.5 py-0.5 rounded-full shrink-0">សកម្ម</span>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground">{dateStr} · {timeStr}</p>
-                  </div>
-                  {isActive && (
-                    <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
-                  )}
+                  <p className="text-xs text-muted-foreground mt-0.5">{dateStr} · {timeStr}</p>
                 </button>
+
+                {isActive && (
+                  <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
+                )}
+
                 <button
                   onClick={() => onDelete(item.sessionId)}
-                  className="px-4 py-3.5 text-muted-foreground hover:text-destructive transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-xl text-muted-foreground hover:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all shrink-0"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
