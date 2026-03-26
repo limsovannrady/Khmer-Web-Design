@@ -11,10 +11,16 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<TabName>("email");
   const { session, saveSession, switchSession, removeFromHistory, history } = useEmailSession();
 
+  const [switchToListAfterCreate, setSwitchToListAfterCreate] = useState(false);
+
   const { mutate: createEmail, isPending: isCreating, error } = useCreateEmail({
     mutation: {
       onSuccess: (data) => {
         saveSession(data);
+        if (switchToListAfterCreate) {
+          setActiveTab("list");
+          setSwitchToListAfterCreate(false);
+        }
       }
     }
   });
@@ -26,6 +32,7 @@ export default function Home() {
   }, [session, createEmail, isCreating, error]);
 
   const handleCreateNew = () => {
+    setSwitchToListAfterCreate(true);
     createEmail();
   };
 
