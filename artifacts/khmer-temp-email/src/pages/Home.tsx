@@ -4,7 +4,6 @@ import { useEmailSession } from "@/hooks/use-email-session";
 import { Header } from "@/components/Header";
 import { EmailHero } from "@/components/EmailHero";
 import { Inbox } from "@/components/Inbox";
-import { FeatureCards } from "@/components/FeatureCards";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -50,7 +49,6 @@ export default function Home() {
           <Inbox sessionId={session.sessionId} />
         )}
         
-        <FeatureCards />
       </main>
 
       <Footer />
