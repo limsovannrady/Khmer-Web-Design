@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCreateEmail } from "@workspace/api-client-react";
 import { useEmailSession } from "@/hooks/use-email-session";
-import { Header } from "@/components/Header";
 import { EmailHero } from "@/components/EmailHero";
 import { Inbox } from "@/components/Inbox";
 import { AboutTab } from "@/components/AboutTab";
@@ -37,8 +36,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col w-full relative">
-      <Header />
-
       <main className="flex-1 w-full pb-20">
         {activeTab === "email" && (
           <>
