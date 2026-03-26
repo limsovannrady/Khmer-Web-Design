@@ -68,7 +68,7 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
                   className="flex-1 min-w-0 text-left"
                 >
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <p className="text-sm font-bold text-foreground truncate">{item.email}</p>
+                    <p className="text-sm font-bold text-foreground break-all">{item.email}</p>
                     {isActive ? (
                       <span className="text-[10px] font-bold text-white bg-green-500 px-1.5 py-0.5 rounded-full shrink-0">
                         កំពុងប្រើ
