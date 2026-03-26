@@ -4,7 +4,7 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "artifacts/khmer-temp-email/dist/public" }
+      "config": { "distDir": "public" }
     },
     {
       "src": "api/index.ts",
