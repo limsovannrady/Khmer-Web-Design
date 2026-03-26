@@ -42,19 +42,29 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
                   onClick={() => onSwitch(item)}
                   className="flex-1 flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/40 active:bg-secondary/60 transition-colors text-left"
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-black text-xs ${
-                    isActive
-                      ? 'bg-gradient-to-br from-primary to-amber-400 text-white shadow-sm'
-                      : 'bg-secondary text-muted-foreground'
-                  }`}>
-                    @
+                  <div className="relative shrink-0">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs ${
+                      isActive
+                        ? 'bg-gradient-to-br from-green-500 to-green-400 text-white shadow-sm shadow-green-500/30'
+                        : 'bg-secondary text-muted-foreground'
+                    }`}>
+                      @
+                    </div>
+                    {isActive && (
+                      <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-background rounded-full" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-foreground truncate">{item.email}</p>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-sm font-bold text-foreground truncate">{item.email}</p>
+                      {isActive && (
+                        <span className="text-[10px] font-bold text-green-400 bg-green-500/15 px-1.5 py-0.5 rounded-full shrink-0">សកម្ម</span>
+                      )}
+                    </div>
                     <p className="text-xs text-muted-foreground">{dateStr} · {timeStr}</p>
                   </div>
                   {isActive && (
-                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
                   )}
                 </button>
                 <button
