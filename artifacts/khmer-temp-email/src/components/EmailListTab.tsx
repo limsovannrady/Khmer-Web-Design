@@ -35,10 +35,6 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
       <div className="space-y-2">
         {history.map((item) => {
           const isActive = item.sessionId === activeSessionId;
-          const date = new Date(item.createdAt);
-          const timeStr = date.toLocaleTimeString('km-KH', { hour: '2-digit', minute: '2-digit' });
-          const dateStr = date.toLocaleDateString('km-KH', { day: '2-digit', month: '2-digit' });
-
           return (
             <div
               key={item.sessionId}
@@ -72,7 +68,6 @@ export function EmailListTab({ history, activeSessionId, onSwitch, onDelete }: E
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">{dateStr} · {timeStr}</p>
                 </button>
 
                 {isActive && (
