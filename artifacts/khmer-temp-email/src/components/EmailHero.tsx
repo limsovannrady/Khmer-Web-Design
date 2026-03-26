@@ -49,11 +49,9 @@ export function EmailHero({ session, isLoading, error, onCreateNew }: EmailHeroP
 
       {/* Title */}
       <div className="text-center pb-1">
-        <p className="text-xs text-muted-foreground font-medium mb-1">Email បណ្ដោះអាសន្ន</p>
         <h2 className="text-2xl font-black text-foreground">
           អ៊ីម៉ែល <span className="text-primary">បណ្ដោះអាសន្ន</span>
         </h2>
-        <p className="text-xs text-muted-foreground mt-1">ការពារ Privacy — ឥតគិតថ្លៃ — ភ្លាមៗ</p>
       </div>
 
       {/* Email Card */}
