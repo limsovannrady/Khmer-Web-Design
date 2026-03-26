@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Mail, RefreshCw, ChevronRight, Inbox as InboxIcon } from "lucide-react";
+import { Mail, RefreshCw, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGetMessages } from "@workspace/api-client-react";
+import { useQueries } from "@tanstack/react-query";
+import { getGetMessagesQueryOptions } from "@workspace/api-client-react";
 import { EmailViewer } from "./EmailViewer";
 import type { EmailMessage } from "@workspace/api-client-react";
 import { cn } from "@/lib/utils";
 
-interface InboxProps {
+interface SessionItem {
   sessionId: string;
+  email: string;
+}
+
+interface InboxProps {
+  sessions: SessionItem[];
+}
+
+interface MessageWithMeta extends EmailMessage {
+  toEmail: string;
 }
 
 const AVATAR_COLORS = [
@@ -30,14 +40,30 @@ function getInitial(fromAddr: string) {
   return name[0]?.toUpperCase() || "?";
 }
 
-export function Inbox({ sessionId }: InboxProps) {
-  const [selectedMessage, setSelectedMessage] = useState<EmailMessage | null>(null);
+export function Inbox({ sessions }: InboxProps) {
+  const [selectedMessage, setSelectedMessage] = useState<MessageWithMeta | null>(null);
 
-  const { data, isLoading, isRefetching, refetch } = useGetMessages(sessionId, {
-    query: { refetchInterval: 5000, enabled: !!sessionId }
+  const results = useQueries({
+    queries: sessions.map((s) => ({
+      ...getGetMessagesQueryOptions(s.sessionId),
+      refetchInterval: 5000,
+      enabled: !!s.sessionId,
+    })),
   });
 
-  const messages = data?.messages || [];
+  const isLoading = results.some((r) => r.isLoading);
+  const isRefetching = results.some((r) => r.isFetching);
+
+  const refetchAll = () => results.forEach((r) => r.refetch());
+
+  const allMessages: MessageWithMeta[] = results
+    .flatMap((r, i) =>
+      (r.data?.messages || []).map((msg) => ({
+        ...msg,
+        toEmail: sessions[i]?.email ?? "",
+      }))
+    )
+    .sort((a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime());
 
   if (selectedMessage) {
     return (
@@ -54,14 +80,14 @@ export function Inbox({ sessionId }: InboxProps) {
       <div className="flex items-center justify-between px-1" id="inbox">
         <div className="flex items-center gap-2">
           <h3 className="text-base font-black text-foreground">ប្រអប់សំបុត្រ</h3>
-          {messages.length > 0 && (
+          {allMessages.length > 0 && (
             <span className="px-2 py-0.5 bg-primary text-white rounded-full text-xs font-black shadow-sm shadow-primary/20">
-              {messages.length}
+              {allMessages.length}
             </span>
           )}
         </div>
         <button
-          onClick={() => refetch()}
+          onClick={refetchAll}
           disabled={isRefetching}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary rounded-lg text-xs font-bold text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors active:scale-95"
         >
@@ -72,12 +98,12 @@ export function Inbox({ sessionId }: InboxProps) {
 
       {/* Message List */}
       <div className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-lg">
-        {isLoading && !messages.length ? (
+        {isLoading && !allMessages.length ? (
           <div className="flex flex-col items-center justify-center p-10 gap-3 text-muted-foreground">
             <RefreshCw className="w-6 h-6 animate-spin text-primary/50" />
             <p className="text-sm">កំពុងផ្ទុកទិន្នន័យ...</p>
           </div>
-        ) : messages.length === 0 ? (
+        ) : allMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-10 gap-3 text-center">
             <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center">
               <Mail className="w-7 h-7 text-muted-foreground opacity-50" />
@@ -89,7 +115,7 @@ export function Inbox({ sessionId }: InboxProps) {
           </div>
         ) : (
           <AnimatePresence initial={false}>
-            {messages.map((msg, index) => (
+            {allMessages.map((msg, index) => (
               <motion.div
                 key={msg.id}
                 initial={{ opacity: 0, y: -8 }}
@@ -120,14 +146,14 @@ export function Inbox({ sessionId }: InboxProps) {
                       {msg.headerSubject || "(គ្មានប្រធានបទ)"}
                     </p>
                     <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {msg.text?.substring(0, 60) || "ចុចដើម្បីអាន..."}
+                      → {msg.toEmail}
                     </p>
                   </div>
 
                   <ChevronRight className="w-4 h-4 text-border shrink-0" />
                 </button>
 
-                {index < messages.length - 1 && (
+                {index < allMessages.length - 1 && (
                   <div className="h-px bg-border/40 ml-[3.75rem]" />
                 )}
               </motion.div>

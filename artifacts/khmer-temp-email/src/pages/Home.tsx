@@ -52,8 +52,8 @@ export default function Home() {
               error={error as Error | null}
               onCreateNew={handleCreateNew}
             />
-            {session && !isCreating && (
-              <Inbox sessionId={session.sessionId} />
+            {history.length > 0 && !isCreating && (
+              <Inbox sessions={history} />
             )}
           </>
         )}
