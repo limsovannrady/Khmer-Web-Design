@@ -5,11 +5,12 @@ import { Header } from "@/components/Header";
 import { EmailHero } from "@/components/EmailHero";
 import { Inbox } from "@/components/Inbox";
 import { AboutTab } from "@/components/AboutTab";
-import { TabBar } from "@/components/TabBar";
+import { EmailListTab } from "@/components/EmailListTab";
+import { TabBar, type TabName } from "@/components/TabBar";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"email" | "about">("email");
-  const { session, saveSession } = useEmailSession();
+  const [activeTab, setActiveTab] = useState<TabName>("email");
+  const { session, saveSession, switchSession, removeFromHistory, history } = useEmailSession();
 
   const { mutate: createEmail, isPending: isCreating, error } = useCreateEmail({
     mutation: {
@@ -29,6 +30,11 @@ export default function Home() {
     createEmail();
   };
 
+  const handleSwitch = (item: { sessionId: string; email: string; createdAt: string }) => {
+    switchSession(item);
+    setActiveTab("email");
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full relative">
       <Header />
@@ -46,6 +52,14 @@ export default function Home() {
               <Inbox sessionId={session.sessionId} />
             )}
           </>
+        )}
+        {activeTab === "list" && (
+          <EmailListTab
+            history={history}
+            activeSessionId={session?.sessionId ?? null}
+            onSwitch={handleSwitch}
+            onDelete={removeFromHistory}
+          />
         )}
         {activeTab === "about" && <AboutTab />}
       </main>
