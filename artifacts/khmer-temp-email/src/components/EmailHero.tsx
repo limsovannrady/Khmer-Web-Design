@@ -76,7 +76,7 @@ export function EmailHero({ session, isLoading, error, onCreateNew }: EmailHeroP
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-secondary text-foreground text-sm font-bold hover:bg-secondary/70 active:scale-95 transition-all border border-border/50"
               >
                 <RefreshCw className="w-4 h-4" />
-                ផ្លាស់ប្ដូរ
+                បង្កើតថ្មី
               </button>
             </div>
           </>
