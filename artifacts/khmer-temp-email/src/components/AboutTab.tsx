@@ -26,18 +26,6 @@ export function AboutTab() {
           </div>
           <ChevronRight className="w-4 h-4 text-border shrink-0" />
         </a>
-
-        <div className="h-px bg-border/40 ml-[3.75rem]" />
-
-        <div className="px-4 py-3 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-            <span className="text-lg">🇰🇭</span>
-          </div>
-          <div>
-            <p className="text-sm font-bold text-foreground">គូប៉ុង E-GetS</p>
-            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} · Email បណ្ដោះអាសន្ន</p>
-          </div>
-        </div>
       </div>
     </div>
   );
