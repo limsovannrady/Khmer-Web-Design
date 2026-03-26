@@ -39,25 +39,6 @@ export function AboutTab() {
           </div>
         </div>
       </div>
-
-      <p className="text-xs font-bold text-muted-foreground px-1 uppercase tracking-wider mt-4">អំពីកម្មវិធី</p>
-
-      <div className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-lg">
-        <div className="px-4 py-3.5 flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">កំណែ</span>
-          <span className="text-sm font-bold">1.0.0</span>
-        </div>
-        <div className="h-px bg-border/40 mx-4" />
-        <div className="px-4 py-3.5 flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">ភ្នំពេញ, កម្ពុជា</span>
-          <span className="text-sm">🇰🇭</span>
-        </div>
-        <div className="h-px bg-border/40 mx-4" />
-        <div className="px-4 py-3.5 flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">API</span>
-          <span className="text-sm font-bold">DropMail</span>
-        </div>
-      </div>
     </div>
   );
 }
