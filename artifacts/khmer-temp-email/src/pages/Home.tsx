@@ -36,6 +36,12 @@ export default function Home() {
     createEmail();
   };
 
+  const handleDelete = (sessionId: string) => {
+    removeFromHistory(sessionId);
+    setSwitchToListAfterCreate(true);
+    createEmail();
+  };
+
   const handleSwitch = (item: { sessionId: string; email: string; createdAt: string }) => {
     switchSession(item);
     setActiveTab("email");
@@ -62,7 +68,7 @@ export default function Home() {
             history={history}
             activeSessionId={session?.sessionId ?? null}
             onSwitch={handleSwitch}
-            onDelete={removeFromHistory}
+            onDelete={handleDelete}
           />
         )}
         {activeTab === "about" && <AboutTab />}
