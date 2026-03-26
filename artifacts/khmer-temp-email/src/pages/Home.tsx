@@ -7,7 +7,7 @@ import { Inbox } from "@/components/Inbox";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
-  const { session, saveSession, restoreSession } = useEmailSession();
+  const { session, saveSession } = useEmailSession();
   
   const { mutate: createEmail, isPending: isCreating, error } = useCreateEmail({
     mutation: {
@@ -28,10 +28,6 @@ export default function Home() {
     createEmail();
   };
 
-  const handleRestore = (sessionId: string) => {
-    restoreSession(sessionId);
-  };
-
   return (
     <div className="min-h-screen flex flex-col w-full relative">
       <Header />
@@ -42,7 +38,6 @@ export default function Home() {
           isLoading={isCreating} 
           error={error as Error | null}
           onCreateNew={handleCreateNew}
-          onRestore={handleRestore}
         />
         
         {session && !isCreating && (

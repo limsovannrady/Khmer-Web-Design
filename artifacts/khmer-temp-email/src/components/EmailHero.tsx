@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Copy, RefreshCw, Loader2, Clock, AlertTriangle, ChevronDown, RotateCcw } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Copy, RefreshCw, Loader2, Clock, AlertTriangle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import type { EmailSession } from "@workspace/api-client-react";
 
@@ -9,15 +8,11 @@ interface EmailHeroProps {
   isLoading: boolean;
   error: Error | null;
   onCreateNew: () => void;
-  onRestore: (sessionId: string) => void;
 }
 
-export function EmailHero({ session, isLoading, error, onCreateNew, onRestore }: EmailHeroProps) {
+export function EmailHero({ session, isLoading, error, onCreateNew }: EmailHeroProps) {
   const [timeLeft, setTimeLeft] = useState<string>("១០:០០");
   const [isExpired, setIsExpired] = useState(false);
-  const [isRestoreOpen, setIsRestoreOpen] = useState(false);
-  const [restoreSessionId, setRestoreSessionId] = useState("");
-  const [isRestoring, setIsRestoring] = useState(false);
 
   useEffect(() => {
     if (!session) return;
@@ -46,24 +41,6 @@ export function EmailHero({ session, isLoading, error, onCreateNew, onRestore }:
       toast({ title: "បានចម្លង!", description: session.email });
     } catch {
       toast({ title: "បរាជ័យ", variant: "destructive" });
-    }
-  };
-
-  const handleRestore = async () => {
-    const id = restoreSessionId.trim();
-    if (!id) return;
-    setIsRestoring(true);
-    try {
-      const res = await fetch(`/api/email/${id}/messages`);
-      if (!res.ok) throw new Error();
-      onRestore(id);
-      setIsRestoreOpen(false);
-      setRestoreSessionId("");
-      toast({ title: "បានស្ដារ!", description: "Inbox ចាស់ត្រូវបានបើក" });
-    } catch {
-      toast({ title: "Session ID មិនត្រឹមត្រូវ", variant: "destructive" });
-    } finally {
-      setIsRestoring(false);
     }
   };
 
@@ -147,57 +124,6 @@ export function EmailHero({ session, isLoading, error, onCreateNew, onRestore }:
             </div>
           </>
         )}
-      </div>
-
-      {/* Restore Section */}
-      <div className="bg-card rounded-2xl border border-border/50 overflow-hidden shadow-lg">
-        <button
-          onClick={() => setIsRestoreOpen(!isRestoreOpen)}
-          className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-secondary/40 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center shrink-0">
-              <RotateCcw className="w-4 h-4 text-muted-foreground" />
-            </div>
-            <div className="text-left">
-              <p className="text-[11px] text-muted-foreground">Session ចាស់</p>
-              <p className="text-sm font-bold">ស្ដារអ៊ីម៉ែលចាស់</p>
-            </div>
-          </div>
-          <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isRestoreOpen ? 'rotate-180' : ''}`} />
-        </button>
-
-        <AnimatePresence>
-          {isRestoreOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="h-px bg-border/50 mx-4" />
-              <div className="p-3 flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Session ID..."
-                  value={restoreSessionId}
-                  onChange={e => setRestoreSessionId(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleRestore()}
-                  className="flex-1 bg-background border border-border rounded-xl px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground placeholder:text-muted-foreground"
-                />
-                <button
-                  onClick={handleRestore}
-                  disabled={isRestoring || !restoreSessionId.trim()}
-                  className="px-4 py-2 bg-foreground text-background rounded-xl text-sm font-bold disabled:opacity-40 active:scale-95 transition-all flex items-center gap-1.5"
-                >
-                  {isRestoring ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
-                  ស្ដារ
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
     </div>
