@@ -9,7 +9,7 @@ export function Header() {
             <Mail className="w-4.5 h-4.5" />
           </div>
           <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-400">
-            ដ្រម៉ែល
+            គូប៉ុង E-GetS
           </span>
         </div>
         <nav className="flex items-center gap-5 text-sm font-medium text-muted-foreground">

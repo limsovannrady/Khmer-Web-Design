@@ -36,7 +36,7 @@ export function Footer() {
             <span className="text-lg">🇰🇭</span>
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">ដ្រម៉ែល</p>
+            <p className="text-sm font-bold text-foreground">គូប៉ុង E-GetS</p>
             <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} · Email បណ្ដោះអាសន្ន</p>
           </div>
         </div>
