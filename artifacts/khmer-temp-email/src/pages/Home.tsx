@@ -8,7 +8,7 @@ import { FeatureCards } from "@/components/FeatureCards";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
-  const { session, saveSession } = useEmailSession();
+  const { session, saveSession, restoreSession } = useEmailSession();
   
   const { mutate: createEmail, isPending: isCreating, error } = useCreateEmail({
     mutation: {
@@ -29,6 +29,10 @@ export default function Home() {
     createEmail();
   };
 
+  const handleRestore = (sessionId: string) => {
+    restoreSession(sessionId);
+  };
+
   return (
     <div className="min-h-screen flex flex-col w-full relative">
       <Header />
@@ -38,7 +42,8 @@ export default function Home() {
           session={session} 
           isLoading={isCreating} 
           error={error as Error | null}
-          onCreateNew={handleCreateNew} 
+          onCreateNew={handleCreateNew}
+          onRestore={handleRestore}
         />
         
         {session && !isCreating && (

@@ -27,32 +27,32 @@ const features = [
 
 export function FeatureCards() {
   return (
-    <section className="py-24 bg-white/50 border-t border-border/50" id="features">
+    <section className="py-32 bg-secondary/30 border-t border-border/50" id="features">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground mb-6 tracking-tight">
             ហេតុអ្វីគួរប្រើប្រាស់ <span className="text-primary">ដ្រម៉ែល</span>?
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto font-medium">
             យើងផ្ដល់ជូននូវដំណោះស្រាយដ៏ល្អបំផុត ក្នុងការជួយអ្នកបញ្ចៀសពីសាររំខាននានាលើអ៊ីម៉ែលពិតរបស់អ្នក។
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {features.map((feature, index) => (
             <motion.div 
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-card p-8 rounded-3xl border border-border/50 shadow-lg shadow-black/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              className="bg-card p-10 rounded-[2rem] border border-border shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 transition-all duration-300"
             >
-              <div className={`w-14 h-14 rounded-2xl ${feature.bg} flex items-center justify-center mb-6`}>
-                <feature.icon className={`w-7 h-7 ${feature.color}`} />
+              <div className={`w-20 h-20 rounded-3xl ${feature.bg} flex items-center justify-center mb-8`}>
+                <feature.icon className={`w-10 h-10 ${feature.color}`} />
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-bold text-foreground mb-4">{feature.title}</h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 {feature.description}
               </p>
             </motion.div>

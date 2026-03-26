@@ -29,5 +29,15 @@ export function useEmailSession() {
     }
   }, []);
 
-  return { session, saveSession };
+  const restoreSession = useCallback((sessionId: string) => {
+    const restoredSession: EmailSession = {
+      sessionId,
+      email: "ស្ដារពីមុន...",
+      expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString()
+    };
+    saveSession(restoredSession);
+    return restoredSession;
+  }, [saveSession]);
+
+  return { session, saveSession, restoreSession };
 }

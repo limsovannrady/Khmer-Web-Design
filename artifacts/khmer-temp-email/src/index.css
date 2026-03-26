@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Kantumruy+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700;900&family=Inter:wght@400;600;700;900&display=swap');
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: 'Kantumruy Pro', 'Battambang', sans-serif;
-  --font-display: 'Kantumruy Pro', sans-serif;
-  --font-body: 'Battambang', sans-serif;
+  --font-sans: 'Hanuman', 'Inter', sans-serif;
+  --font-display: 'Hanuman', 'Inter', sans-serif;
+  --font-body: 'Hanuman', 'Inter', sans-serif;
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -38,77 +38,79 @@
 }
 
 :root {
-  /* Warm Orange / Khmer Culture inspired color palette */
-  --background: 30 30% 99%;
-  --foreground: 20 10% 15%;
+  --background: 222 47% 8%;
+  --foreground: 0 0% 98%;
   
-  --card: 0 0% 100%;
-  --card-foreground: 20 10% 15%;
+  --card: 222 47% 12%;
+  --card-foreground: 0 0% 98%;
   
-  --popover: 0 0% 100%;
-  --popover-foreground: 20 10% 15%;
+  --popover: 222 47% 12%;
+  --popover-foreground: 0 0% 98%;
   
-  --primary: 28 90% 55%;
+  --primary: 25 95% 53%;
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 35 100% 95%;
-  --secondary-foreground: 28 90% 40%;
+  --secondary: 222 30% 16%;
+  --secondary-foreground: 0 0% 98%;
   
-  --muted: 30 15% 94%;
-  --muted-foreground: 25 10% 45%;
+  --muted: 222 30% 15%;
+  --muted-foreground: 215 20% 60%;
   
-  --accent: 40 100% 90%;
-  --accent-foreground: 28 90% 40%;
+  --accent: 25 95% 53%;
+  --accent-foreground: 0 0% 100%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
   
-  --border: 30 20% 90%;
-  --input: 30 20% 90%;
-  --ring: 28 90% 55%;
+  --border: 222 30% 20%;
+  --input: 222 30% 20%;
+  --ring: 25 95% 53%;
   
   --radius: 1rem;
 }
 
 .dark {
-  --background: 20 10% 10%;
-  --foreground: 30 30% 95%;
+  --background: 222 47% 8%;
+  --foreground: 0 0% 98%;
   
-  --card: 20 10% 13%;
-  --card-foreground: 30 30% 95%;
+  --card: 222 47% 12%;
+  --card-foreground: 0 0% 98%;
   
-  --popover: 20 10% 13%;
-  --popover-foreground: 30 30% 95%;
+  --popover: 222 47% 12%;
+  --popover-foreground: 0 0% 98%;
   
-  --primary: 28 90% 55%;
+  --primary: 25 95% 53%;
   --primary-foreground: 0 0% 100%;
   
-  --secondary: 25 20% 20%;
-  --secondary-foreground: 30 30% 95%;
+  --secondary: 222 30% 16%;
+  --secondary-foreground: 0 0% 98%;
   
-  --muted: 25 20% 20%;
-  --muted-foreground: 25 10% 65%;
+  --muted: 222 30% 15%;
+  --muted-foreground: 215 20% 60%;
   
-  --accent: 25 20% 20%;
-  --accent-foreground: 30 30% 95%;
+  --accent: 25 95% 53%;
+  --accent-foreground: 0 0% 100%;
   
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 30 30% 95%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
   
-  --border: 25 20% 20%;
-  --input: 25 20% 20%;
-  --ring: 28 90% 55%;
+  --border: 222 30% 20%;
+  --input: 222 30% 20%;
+  --ring: 25 95% 53%;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground antialiased font-sans selection:bg-primary/20 selection:text-primary;
     background-image: 
-      radial-gradient(at 0% 0%, hsla(28, 90%, 55%, 0.05) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(45, 100%, 60%, 0.05) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(25, 95%, 53%, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(222, 47%, 16%, 0.5) 0px, transparent 50%);
     background-attachment: fixed;
   }
   h1, h2, h3, h4, h5, h6 {
